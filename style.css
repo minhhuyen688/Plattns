@@ -1,14 +1,12 @@
 body {
-  background: #222831;
+  text-align: center;
+  background-color: #87CEEB;
+  font-family: sans-serif;
 }
 
-#canvas1 {
-  border: 2px solid #eeeeee;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 900px;
-  height: 600px;
-  font-family: "Teko";
+canvas {
+  background-color: #9be89b;
+  border: 3px solid #444;
+  display: block;
+  margin: 0 auto;
 }
