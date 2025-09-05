@@ -1,58 +1,87 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// Nhân vật
-let player = {
-  x: 50,
-  y: 300,
-  width: 30,
-  height: 30,
-  color: "pink",
-  velocityY: 0,
-  jumpForce: 12,
-  grounded: false
-};
+let player, obstacle, gravity, score, gameRunning = false;
+let bgMusic = document.getElementById("bg-music");
 
-// Chướng ngại vật
-let obstacle = {
-  x: 400,
-  y: 340,
-  width: 30,
-  height: 30,
-  color: "red"
-};
+function init() {
+  player = {
+    x: 50,
+    y: 300,
+    width: 30,
+    height: 30,
+    color: "pink",
+    velocityY: 0,
+    jumpForce: 12,
+    grounded: false
+  };
 
-let gravity = 0.8;
+  obstacle = {
+    x: canvas.width,
+    y: canvas.height - 60,
+    width: 30,
+    height: 30,
+    color: "red",
+    speed: 4
+  };
 
-// Phím điều khiển
+  gravity = 0.8;
+  score = 0;
+  document.getElementById("score-value").textContent = score;
+}
+
 document.addEventListener("keydown", function (e) {
-  if (e.code === "Space" && player.grounded) {
+  if (e.code === "Space" && player.grounded && gameRunning) {
     player.velocityY = -player.jumpForce;
     player.grounded = false;
   }
 });
 
+function startGame() {
+  document.getElementById("menu").style.display = "none";
+  document.getElementById("game-over").style.display = "none";
+  canvas.style.display = "block";
+  document.getElementById("score").style.display = "block";
+  bgMusic.play();
+
+  init();
+  gameRunning = true;
+  update();
+}
+
+function restartGame() {
+  startGame();
+}
+
 function update() {
-  // Trọng lực
+  if (!gameRunning) return;
+
   player.velocityY += gravity;
   player.y += player.velocityY;
 
-  // Va chạm đất
   if (player.y + player.height >= canvas.height - 30) {
     player.y = canvas.height - 30 - player.height;
     player.velocityY = 0;
     player.grounded = true;
   }
 
-  // Kiểm tra va chạm với chướng ngại vật
+  // Di chuyển obstacle
+  obstacle.x -= obstacle.speed;
+  if (obstacle.x + obstacle.width < 0) {
+    obstacle.x = canvas.width + Math.random() * 200;
+    score++;
+    document.getElementById("score-value").textContent = score;
+  }
+
+  // Kiểm tra va chạm
   if (
     player.x < obstacle.x + obstacle.width &&
     player.x + player.width > obstacle.x &&
     player.y < obstacle.y + obstacle.height &&
     player.y + player.height > obstacle.y
   ) {
-    alert("💥 Game Over! Làm lại nhé!");
-    document.location.reload();
+    gameOver();
+    return;
   }
 
   draw();
@@ -70,7 +99,7 @@ function draw() {
   ctx.fillStyle = player.color;
   ctx.fillRect(player.x, player.y, player.width, player.height);
 
-  // Vẽ chướng ngại vật
+  // Vẽ chướng ngại vật hình tam giác
   ctx.fillStyle = obstacle.color;
   ctx.beginPath();
   ctx.moveTo(obstacle.x, obstacle.y + obstacle.height);
@@ -80,4 +109,11 @@ function draw() {
   ctx.fill();
 }
 
-update();
+function gameOver() {
+  gameRunning = false;
+  bgMusic.pause();
+  document.getElementById("final-score").textContent = score;
+  document.getElementById("game-over").style.display = "block";
+  canvas.style.display = "none";
+  document.getElementById("score").style.display = "none";
+}
