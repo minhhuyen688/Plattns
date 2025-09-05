@@ -1,17 +1,28 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Game Nhảy Tránh Chướng Ngại</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Game JavaScript Platformer</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>🕹 Học lập trình JavaScript - Platformer</h1>
-  <canvas id="gameCanvas" width="800" height="400"></canvas>
+  <h1>🎮 Recall By KEVIN</h1>
 
-  <!-- Nhạc nền -->
-  <audio id="bg-music" autoplay loop>
-    <source src="music.mp3" type="audio/mpeg">
+  <div id="menu">
+    <button onclick="startGame()">▶ Bắt đầu trò chơi</button>
+  </div>
+
+  <div id="game-over">
+    <h2>💥 Game Over!</h2>
+    <p>Điểm của bạn: <span id="final-score">0</span></p>
+    <button onclick="restartGame()">Chơi lại</button>
+  </div>
+
+  <canvas id="gameCanvas" width="800" height="400"></canvas>
+  <p id="score">🎯 Điểm: <span id="score-value">0</span></p>
+
+  <audio id="bg-music" loop>
+    <source src="music.mp3" type="audio/mpeg" />
   </audio>
 
   <script src="script.js"></script>
